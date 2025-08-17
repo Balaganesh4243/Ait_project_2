@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meal Finder</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">🍴 MEAL FINDER</div>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+</header>
+
+<nav id="sideMenu">
+    <button class="close-btn" onclick="toggleMenu()">✖</button>
+    <ul>
+        <li>Beef</li>
+        <li>Chicken</li>
+        <li>Dessert</li>
+        <li>Lamb</li>
+        <li>Miscellaneous</li>
+        <li>Pasta</li>
+        <li>Pork</li>
+        <li>Seafood</li>
+        <li>Side</li>
+        <li>Starter</li>
+        <li>Vegan</li>
+        <li>Vegetarian</li>
+        <li>Breakfast</li>
+        <li>Goat</li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <input type="text" placeholder="Search recipes here ...">
+    <button class="search-btn">🔍</button>
+    <h1>What are your favorite cuisines?</h1>
+    <p>PERSONALIZE YOUR EXPERIENCE</p>
+</section>
+
+<section class="categories">
+    <h2>Categories</h2>
+    <div class="grid">
+        <div class="card"><img src="beef.jpg"><span>Beef</span></div>
+        <div class="card"><img src="chicken.jpg"><span>Chicken</span></div>
+        <div class="card"><img src="dessert.jpg"><span>Dessert</span></div>
+        <div class="card"><img src="lamb.jpg"><span>Lamb</span></div>
+        <div class="card"><img src="misc.jpg"><span>Miscellaneous</span></div>
+        <div class="card"><img src="pasta.jpg"><span>Pasta</span></div>
+        <div class="card"><img src="pork.jpg"><span>Pork</span></div>
+        <div class="card"><img src="seafood.jpg"><span>Seafood</span></div>
+        <div class="card"><img src="side.jpg"><span>Side</span></div>
+        <div class="card"><img src="starter.jpg"><span>Starter</span></div>
+        <div class="card"><img src="vegan.jpg"><span>Vegan</span></div>
+        <div class="card"><img src="vegetarian.jpg"><span>Vegetarian</span></div>
+        <div class="card"><img src="breakfast.jpg"><span>Breakfast</span></div>
+        <div class="card"><img src="goat.jpg"><span>Goat</span></div>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
