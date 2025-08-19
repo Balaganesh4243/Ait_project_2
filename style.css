@@ -99,10 +99,7 @@ header {
     transition: transform 0.2s;
 }
 
-.card img {
-    width: 100%;
-    border-radius: 5px;
-}
+
 
 .card span {
     display: inline-block;
