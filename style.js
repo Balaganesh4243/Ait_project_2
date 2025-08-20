@@ -46,7 +46,7 @@ const closeDrawer = () => {
   backdrop.classList.remove('show'); 
 };
 
-/* ===== UI WIRES ===== */
+/* ===== UIqew WIRES ===== */
 hamburger.addEventListener('click', openDrawer);
 drawerClose.addEventListener('click', closeDrawer);
 backdrop.addEventListener('click', closeDrawer);
