@@ -64,7 +64,45 @@
   </section>
 
   <!-- Meal Details -->
- 
+  <section id="mealDetails" class="details hidden">
+    <div class="breadcrumb" id="breadcrumb"></div>
+
+    <div class="details-body">
+      <div class="details-image">
+        <img id="detailsImg" alt="meal"/>
+      </div>
+      <div class="details-meta">
+        <div class="meta-line">
+          <span class="meta-label">CATEGORY:</span>
+          <span id="detailsCategory" class="meta-value"></span>
+        </div>
+        <div class="meta-line">
+          <span class="meta-label">Source:</span>
+          <a id="detailsSource" target="_blank" rel="noopener"></a>
+        </div>
+        <div class="meta-line">
+          <span class="meta-label">Tags:</span>
+          <div id="detailsTags" class="tags"></div>
+        </div>
+
+        <div class="ingbox">
+          <h4>Ingredients</h4>
+          <ul id="ingredientsList" class="bullets"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="measure-instructions">
+      <div class="measure">
+        <h4>Measure:</h4>
+        <ul id="measureList" class="ticks"></ul>
+      </div>
+      <div class="instructions">
+        <h4>Instructions:</h4>
+        <ol id="instructionsList" class="steps"></ol>
+      </div>
+    </div>
+  </section>
 
   <script src="./style.js"></script>
 </body>
