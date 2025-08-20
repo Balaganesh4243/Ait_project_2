@@ -32,13 +32,19 @@ let CATEGORY_MAP = {};      // quick lookup by name
 /* ===== HELPERS ===== */
 const api = {
   categories: 'https://www.themealdb.com/api/json/v1/1/categories.php',
-  search: (q) => https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(q)},
-  filterByCat: (c) => https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(c)},
-  details: (id) => https://www.themealdb.com/api/json/v1/1/lookup.php?i=${encodeURIComponent(id)}
+  search: (q) => `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(q)}`,
+  filterByCat: (c) => `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(c)}`,
+  details: (id) => `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${encodeURIComponent(id)}`
 };
 
-const openDrawer = () => { drawer.classList.add('open'); backdrop.classList.add('show'); }
-const closeDrawer = () => { drawer.classList.remove('open'); backdrop.classList.remove('show'); }
+const openDrawer = () => { 
+  drawer.classList.add('open'); 
+  backdrop.classList.add('show'); 
+};
+const closeDrawer = () => { 
+  drawer.classList.remove('open'); 
+  backdrop.classList.remove('show'); 
+};
 
 /* ===== UI WIRES ===== */
 hamburger.addEventListener('click', openDrawer);
@@ -48,7 +54,7 @@ backdrop.addEventListener('click', closeDrawer);
 searchBtn.addEventListener('click', () => doSearch());
 searchInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ doSearch(); }});
 
-/* Delegate clicks inside mealsGrid so cards always work */
+/* Delegate clicks inside mealsGrid */
 mealsGrid.addEventListener('click', (e) => {
   const card = e.target.closest('[data-id]');
   if (!card) return;
@@ -84,7 +90,9 @@ async function loadCategories(){
   CATEGORY_MAP = Object.fromEntries(CATEGORIES.map(c => [c.strCategory, c]));
 
   // Drawer list
-  drawerList.innerHTML = CATEGORIES.map(c => <li data-cat="${c.strCategory}">${c.strCategory}</li>).join('');
+  drawerList.innerHTML = CATEGORIES.map(c => `
+    <li data-cat="${c.strCategory}">${c.strCategory}</li>
+  `).join('');
 
   // Grid
   categoriesGrid.innerHTML = CATEGORIES.map(c => `
@@ -100,7 +108,7 @@ async function loadCategories(){
 /* ===== SEARCH ===== */
 async function doSearch(){
   const q = searchInput.value.trim();
-  categoryAbout.classList.add('hidden'); // Hide category about when searching
+  categoryAbout.classList.add('hidden');
   if(!q){ mealsGrid.innerHTML = ''; return; }
 
   const res = await fetch(api.search(q));
@@ -111,7 +119,6 @@ async function doSearch(){
 
 /* ===== FILTER BY CATEGORY ===== */
 async function loadMealsByCategory(categoryName){
-  // Show description box
   const cat = CATEGORY_MAP[categoryName];
   if (cat){
     aboutTitle.textContent = cat.strCategory;
@@ -129,78 +136,19 @@ async function loadMealsByCategory(categoryName){
 
 /* ===== RENDER MEAL CARDS ===== */
 function renderMeals(meals, catName){
-  detailsSection.classList.add('hidden'); // hide details when listing
+  detailsSection.classList.add('hidden');
   mealsGrid.innerHTML = meals.map(m => `
     <article class="card" data-id="${m.idMeal}" title="${m.strMeal}">
       <img src="${m.strMealThumb}" alt="${m.strMeal}">
       <div class="card-body">
-        ${catName ? <span class="badge">${catName}</span> : ''}
+        ${catName ? `<span class="badge">${catName}</span>` : ''}
         <div class="card-title">${m.strMeal}</div>
       </div>
     </article>
   `).join('');
 
   if(meals.length === 0){
-    mealsGrid.innerHTML = <p style="color:#666">No meals found.</p>;
+    mealsGrid.innerHTML = `<p style="color:#666">No meals found.</p>`;
   }
 }
 
-/* ===== MEAL DETAILS ===== */
-async function showMealDetails(id){
-  const res = await fetch(api.details(id));
-  const data = await res.json();
-  const meal = data.meals && data.meals[0];
-  if(!meal) return;
-
-  // Breadcrumb (like screenshot title bar)
-  breadcrumb.textContent = ▶ ${meal.strMeal};
-
-  // Basic meta
-  detailsImg.src = meal.strMealThumb;
-  detailsImg.alt = meal.strMeal;
-  detailsCategory.textContent = meal.strCategory || '-';
-  detailsSource.textContent = meal.strSource ? new URL(meal.strSource).hostname : '—';
-  detailsSource.href = meal.strSource || '#';
-
-  // Tags
-  detailsTags.innerHTML = '';
-  if (meal.strTags){
-    meal.strTags.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>{
-      const span = document.createElement('span');
-      span.className = 'tag';
-      span.textContent = t;
-      detailsTags.appendChild(span);
-    });
-  }
-
-  // Ingredients + measures (1..20)
-  ingredientsList.innerHTML = '';
-  measureList.innerHTML = '';
-  for (let i=1; i<=20; i++){
-    const ing = meal[strIngredient${i}];
-    const meas = meal[strMeasure${i}];
-    if(ing && ing.trim()){
-      const liI = document.createElement('li');
-      liI.textContent = ${ing};
-      ingredientsList.appendChild(liI);
-
-      const liM = document.createElement('li');
-      liM.textContent = ${meas || ''}.trim();
-      measureList.appendChild(liM);
-    }
-  }
-
-  // Instructions -> split into steps
-  const steps = (meal.strInstructions || '')
-    .replace(/\r/g,'')
-    .split(/\n+/)
-    .map(s => s.trim())
-    .filter(Boolean);
-
-  instructionsList.innerHTML = steps.map(s => <li>${s}</li>).join('');
-
-  detailsSection.classList.remove('hidden');
-}
-
-/* ===== INIT ===== */
-loadCategories();
