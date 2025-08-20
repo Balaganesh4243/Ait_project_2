@@ -152,3 +152,57 @@ function renderMeals(meals, catName){
   }
 }
 
+/* ===== MEAL DETAILS ===== */
+async function showMealDetails(id){
+  const res = await fetch(api.details(id));
+  const data = await res.json();
+  const meal = data.meals && data.meals[0];
+  if(!meal) return;
+
+  breadcrumb.textContent = `▶ ${meal.strMeal}`;
+
+  detailsImg.src = meal.strMealThumb;
+  detailsImg.alt = meal.strMeal;
+  detailsCategory.textContent = meal.strCategory || '-';
+  detailsSource.textContent = meal.strSource ? new URL(meal.strSource).hostname : '—';
+  detailsSource.href = meal.strSource || '#';
+
+  detailsTags.innerHTML = '';
+  if (meal.strTags){
+    meal.strTags.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>{
+      const span = document.createElement('span');
+      span.className = 'tag';
+      span.textContent = t;
+      detailsTags.appendChild(span);
+    });
+  }
+
+  ingredientsList.innerHTML = '';
+  measureList.innerHTML = '';
+  for (let i=1; i<=20; i++){
+    const ing = meal[`strIngredient${i}`];
+    const meas = meal[`strMeasure${i}`];
+    if(ing && ing.trim()){
+      const liI = document.createElement('li');
+      liI.textContent = ing;
+      ingredientsList.appendChild(liI);
+
+      const liM = document.createElement('li');
+      liM.textContent = (meas || '').trim();
+      measureList.appendChild(liM);
+    }
+  }
+
+  const steps = (meal.strInstructions || '')
+    .replace(/\r/g,'')
+    .split(/\n+/)
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  instructionsList.innerHTML = steps.map(s => `<li>${s}</li>`).join('');
+
+  detailsSection.classList.remove('hidden');
+}
+
+/* ===== INIT ===== */
+loadCategories();
